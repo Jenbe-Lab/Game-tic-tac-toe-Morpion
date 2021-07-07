@@ -1,0 +1,309 @@
+<html>
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="style.css" />
+
+    <link href="https://fonts.googleapis.com/css?family=Abel&display=swap" rel="stylesheet">
+
+    <title>Morpion</title>
+</head>
+
+<body>
+
+    <div id="conteneur">
+
+        <div id="regles">
+            <div id="contenu_regles">
+                <h1 class="titre">LE MORPION</h1>
+
+                <h2><span class="couleur">Règles du jeu:</span></h2>
+
+                <p>Le morpion est un <span class="couleur">jeu de reflexion</span> dont le but est d'aligner trois symboles identiques avant votre adversaire.</p>
+                <p>Le jeu se joue sur <span class="couleur">la grille suivante</span>, elle est composées de 3 carrés sur 3.</p>
+                <p>Le premier joueur joue avec le symbole <span class="couleur_bleue">X</span>, le deuxième joueur joue avec le symbole <span class="couleur_rose">O</span></p>
+                <p><span class="couleur_violet">Le jeu peut commencer!</span></p>
+                <p>Les joueurs vont s'affronter à tour de rôle: le joueur avec le symbole <span class="couleur_bleue">X</span> commence, il doit placer le symbole dans une case vide, ensuite c'est au tour du joueur avec le symbole <span class="couleur_rose">O</span></p>
+                <p> Si un joueur a <span class="couleur">trois de ses symboles </span>alignés horizontalement, verticalement ou en diagonale:</br><span class="couleur_orange"> il gagne la partie!</span></p>
+                <p>Si toutes les cases sont pleines et qu'aucun joueur n'a gagné la partie:</br><span class="couleur_orange">c'est match nul!</span></p>
+
+                <button id="commencer">Démarrer le jeu</button>
+
+            </div>
+        </div>
+
+        <div id="jeu">
+
+            <div id="bouttons">
+                <div>
+                    <button value="0"></button>
+                    <button value="1"></button>
+                    <button value="2"></button>
+                </div>
+
+                <div>
+                    <button value="3"></button>
+                    <button value="4"></button>
+                    <button value="5"></button>
+                </div>
+
+                <div>
+                    <button value="6"></button>
+                    <button value="7"></button>
+                    <button value="8"></button>
+                </div>
+            </div>
+
+            <div id="gameStatus"></div>
+
+            <div id="resultat"></div>
+            <div id="rejouer"><a>Rejouer</a></div>
+        </div>
+
+
+    </div>
+
+    <script>
+        document.getElementById("rejouer").style.display = "none";
+        var bouton = document.querySelector("button");
+
+        bouton.addEventListener("click", function() {
+            document.getElementById("jeu").style.display = "block";
+            document.getElementById("commencer").style.visibility = "hidden";
+
+        });
+
+
+        <!-- -- -- -- -- -- -- -- -- -- -- -- - réglages de l afficheur-- -- -- -- -- -- -- -- -- - >
+        
+
+        var Afficheur = function(element) {
+                var display = element;
+
+                function setText(message) {
+                    display.innerHTML = message;
+                }
+
+                return {
+                    sendMessage: setText
+                };
+            }
+
+            <!-- -- -- -- -- -- -- -- -- -- -- -- - réglages du tour de jeu-- -- -- -- -- -- -- -- -- -- - >
+        
+        var jeuTour = 0;
+        var joueurs = ["X", "O"];
+
+
+        var cases = document.querySelectorAll("#jeu button");
+
+        for (var i = 0; i < cases.length; i++) {
+
+
+        }
+        var afficheur = new Afficheur(document.querySelector("#gameStatus"));
+
+        afficheur.sendMessage("Le jeu peut démarrer.</br>Joueur" + " " + joueurs[jeuTour] + "</br>C'est votre tour!");
+
+
+        <!-- -- -- -- -- -- -- -- -- - fonction qui determine le jeu gagnant parmi 8 possibilités-- -- -- -- -- -- -- -- -- -- >
+        
+
+        function determinerVainqueur(cases, joueurs, joueurTour) {
+
+            if (cases[0].innerHTML == joueurs[jeuTour] &&
+                cases[1].innerHTML == joueurs[jeuTour] &&
+                cases[2].innerHTML == joueurs[jeuTour])
+                return true;
+
+            if (cases[3].innerHTML == joueurs[jeuTour] &&
+                cases[4].innerHTML == joueurs[jeuTour] &&
+                cases[5].innerHTML == joueurs[jeuTour])
+                return true;
+
+
+            if (cases[6].innerHTML == joueurs[jeuTour] &&
+                cases[7].innerHTML == joueurs[jeuTour] &&
+                cases[8].innerHTML == joueurs[jeuTour])
+                return true;
+
+
+            if (cases[0].innerHTML == joueurs[jeuTour] &&
+                cases[3].innerHTML == joueurs[jeuTour] &&
+                cases[6].innerHTML == joueurs[jeuTour])
+                return true;
+
+
+            if (cases[1].innerHTML == joueurs[jeuTour] &&
+                cases[4].innerHTML == joueurs[jeuTour] &&
+                cases[7].innerHTML == joueurs[jeuTour])
+                return true;
+
+
+            if (cases[2].innerHTML == joueurs[jeuTour] &&
+                cases[5].innerHTML == joueurs[jeuTour] &&
+                cases[8].innerHTML == joueurs[jeuTour])
+                return true;
+
+            if (cases[0].innerHTML == joueurs[jeuTour] &&
+                cases[4].innerHTML == joueurs[jeuTour] &&
+                cases[8].innerHTML == joueurs[jeuTour])
+                return true;
+
+
+            if (cases[2].innerHTML == joueurs[jeuTour] &&
+                cases[4].innerHTML == joueurs[jeuTour] &&
+                cases[6].innerHTML == joueurs[jeuTour])
+                return true;
+        }
+        
+        <!-- -- -- -- -- -- -- -- -- -- -- - fonction qui efface les cases pour permettre de rejouer-- -- -- -- -- -- -- -- -- - >
+        function efface() {
+            for (var i = 0; i < cases.length; i++) {
+                cases[i].innerHTML = "";
+            }
+        }
+
+        <!-- -- -- -- -- -- -- -- -- -- -- - fonction qui determine une égalité de jeu-- -- -- -- -- -- -- -- -- - >
+        
+
+        function matchNul(cases) {
+
+            for (var i = 0; i < cases.length; i++) {
+                if (cases[i].innerHTML.length == 0)
+
+                    return false;
+
+            }
+
+            document.getElementById("resultat").textContent = "MATCH NUL!";
+            document.getElementById("rejouer").style.display = "block";
+            document.getElementById("resultat").style.display = "block";
+            document.getElementById("gameStatus").style.display = "none";
+
+            var cases = document.querySelectorAll("#jeu button");
+
+            for (let i = 0, len = cases.length; i < len; i++) {
+
+                var jeuTour = 0;
+                var joueurs = ["X", "O"];
+
+            }
+
+            return true;
+        }
+  
+        <!-- -- -- -- -- -- -- -- -- -- -- -- -- -- - creation de la boucle qui determine le tour de jeu-- -- -- -- -- -- -- -- -- -- -- -- >
+
+        for (let i = 0, len = cases.length; i < len; i++) {
+
+
+            jeuTour = 0;
+
+            cases[i].addEventListener("click", function() {
+
+
+                <!--On vérifie si une case est déjà remplie-- >
+
+                if (this.innerHTML.length !== 0) {
+
+                   afficheur.sendMessage("Cette case est occupée, veuillez choisir une autre case!");
+
+                }
+
+                <!--si la case est vide on rempli avec le symbole du joueur actuel-- >
+                
+                
+                else {
+                    this.innerHTML = joueurs[jeuTour];
+
+                    if (jeuTour == [0]) {
+
+                        cases[i].style.color = "#00CCFF";
+
+                    } else {
+                        cases[i].style.color = "#FF00E0";
+
+                    }
+
+                    <!-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --Résultat de la partie-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- >
+                    
+
+
+                    finJeu = determinerVainqueur(cases, joueurs, jeuTour);
+
+                    //Si combinaison ok - affiche vert + refresh 
+                    if (finJeu) {
+
+                        document.getElementById("gameStatus").style.display = "none";
+                        document.getElementById("resultat").textContent = "Le joueur " + joueurs[jeuTour] + " a gagné!";
+                        document.getElementById("resultat").style.display = "block";
+                        document.getElementById("rejouer").style.display = "block";
+                        efface();
+                    } else {
+
+                        matchNul(cases)
+
+                    }
+
+                    jeuTour++;
+
+
+                    <!--tour = 0 apres incrementation tour vaut 1 // 1 modulo deux= 1-->
+                    
+
+                        <!--tour = 1 apres incrementation tour vaut 2 // 2 modulo deux= 0-->
+                        
+
+                    jeuTour = jeuTour % 2;
+
+                    afficheur.sendMessage("Joueur" + " " + joueurs[jeuTour] + "</br>C'est votre tour!");
+
+                }
+
+                <!-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --rejouer-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- - >
+                
+                var rejouer = document.getElementById("rejouer");
+                rejouer.onclick = function() {
+                    efface();
+
+                    document.getElementById("gameStatus").style.display = "block";
+                    document.getElementById("rejouer").style.display = "none";
+                    document.getElementById("resultat").style.display = "none";
+
+                    if (jeuTour == 1) {
+                        for (let i = 0, len = cases.length; i < len; i++) {
+                            jeuTour = 0;
+
+                            var afficheur = new Afficheur(document.querySelector("#gameStatus"));
+
+                            afficheur.sendMessage("Le jeu peut démarrer.</br>Joueur" + " " + joueurs[jeuTour] + "</br>C'est votre tour!");
+                            document.getElementById("resultat").style.display = "none";
+                        }
+
+
+                    } else {
+
+                        var afficheur = new Afficheur(document.querySelector("#gameStatus"));
+
+                        afficheur.sendMessage("Le jeu peut démarrer.</br>Joueur" + " " + joueurs[jeuTour] + "</br>C'est votre tour!");
+                        document.getElementById("resultat").style.display = "none";
+                    }
+
+
+
+
+                };
+
+
+            });
+        }
+
+    </script>
+    <script src="js/ajax.js"></script>
+</body>
+
+</html>
